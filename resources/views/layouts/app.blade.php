@@ -200,80 +200,14 @@
                 </div>
                 
                 <!-- Main Content -->
-                <div class="col-md-9 col-lg-10 ms-sm-auto main-content">
-                    <!-- Top Navbar -->
-                    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4 rounded-3">
-                        <div class="container-fluid">
-                            <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            
-                            <!-- Mobile sidebar -->
-                            <div class="collapse navbar-collapse d-md-none" id="sidebarMenu">
-                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="{{ route('dashboard') }}">لوحة التحكم</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">الأدوية</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">الوصفات</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">العملاء</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">المبيعات</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">التقارير</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">الإعدادات</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                            <!-- User dropdown -->
-                            <div class="ms-auto">
-                                <div class="dropdown user-dropdown">
-                                    <a class="btn dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-user-circle me-1"></i> {{ Auth::user()->name }}
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-start shadow-sm border-0" aria-labelledby="userDropdown">
-                                        <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="fas fa-user-edit me-2"></i> الملف الشخصي</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <form method="POST" action="{{ route('logout') }}">
-                                                @csrf
-                                                <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i> تسجيل الخروج</button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </nav>
-                    
-                    <!-- Header if provided -->
-            @isset($header)
-                        <header class="mb-4">
-                            <div class="bg-white shadow-sm p-3 rounded-3">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
-                    <!-- Main Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
+                <main class="col-md-9 col-lg-10 ms-sm-auto px-md-4 py-4">
+                    @yield('content')
+                </main>
             </div>
         </div>
-        
-        <!-- Bootstrap JS -->
+
+        <!-- Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+        @stack('scripts')
     </body>
 </html>

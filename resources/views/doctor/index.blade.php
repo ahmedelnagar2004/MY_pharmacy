@@ -1,4 +1,5 @@
 <x-admin-layout>
+
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
@@ -82,4 +83,4 @@
             </div>
         </div>
     </div>
-</x-admin-layout> 
+</x-admin-layout>

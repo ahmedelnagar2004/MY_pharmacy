@@ -14,24 +14,34 @@
         <!-- تصفية وبحث -->
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body p-3">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
-                            <input type="text" class="form-control border-start-0" placeholder="ابحث عن طبيب...">
+                <form action="{{ route('webdoctor.search') }}" method="GET" id="search-form">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                                <input type="text" name="search" class="form-control border-start-0" placeholder="ابحث عن طبيب بالاسم أو التخصص..." value="{{ request('search') }}" id="search-input" autocomplete="off">
+                                @if(request('search'))
+                                    <button type="button" class="btn btn-light border" id="clear-search">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="specialty" class="form-select" id="specialty-select">
+                                <option value="كل التخصصات" {{ request('specialty') == 'كل التخصصات' || !request('specialty') ? 'selected' : '' }}>كل التخصصات</option>
+                                @foreach($specialties as $specialty)
+                                    <option value="{{ $specialty }}" {{ request('specialty') == $specialty ? 'selected' : '' }}>{{ $specialty }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <select class="form-select">
-                            <option selected>كل التخصصات</option>
-                            <option value="عظام">عظام</option>
-                            <option value="جلدية">جلدية</option>
-                            <option value="باطنة">باطنة</option>
-                            <option value="أطفال">أطفال</option>
-                            <option value="نساء وتوليد">نساء وتوليد</option>
-                        </select>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
 
@@ -88,15 +98,18 @@
                 @endforeach
             </div>
             
-            <!-- ترقيم الصفحات -->
+            <!-- ترقيم الصفحات مع الحفاظ على معلمات البحث -->
             <div class="d-flex justify-content-center mt-5">
-                {{ $doctors->links() }}
+                {{ $doctors->appends(request()->query())->links() }}
             </div>
         @else
             <div class="text-center py-5">
                 <img src="{{ asset('images/no-doctors.svg') }}" alt="لا يوجد أطباء" style="max-width: 200px; opacity: 0.7">
-                <h4 class="mt-3">لا يوجد أطباء حالياً</h4>
-                <p class="text-muted">سيتم إضافة أطباء قريباً، تابعنا!</p>
+                <h4 class="mt-3">لا يوجد أطباء مطابقين لبحثك</h4>
+                <p class="text-muted">جرب تغيير معايير البحث أو التصفية</p>
+                <a href="{{ route('webdoctor.index') }}" class="btn btn-outline-primary mt-2">
+                    <i class="fas fa-sync-alt me-1"></i> عرض جميع الأطباء
+                </a>
             </div>
         @endif
     </div>
@@ -127,3 +140,37 @@
         }
     </style>
 </x-user-layout>
+
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // البحث عند تغيير التخصص
+        const specialtySelect = document.getElementById('specialty-select');
+        if (specialtySelect) {
+            specialtySelect.addEventListener('change', function() {
+                document.getElementById('search-form').submit();
+            });
+        }
+        
+        // مسح البحث
+        const clearSearchBtn = document.getElementById('clear-search');
+        if (clearSearchBtn) {
+            clearSearchBtn.addEventListener('click', function() {
+                document.getElementById('search-input').value = '';
+                document.getElementById('search-form').submit();
+            });
+        }
+        
+        // تنفيذ البحث عند الضغط على Enter
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.getElementById('search-form').submit();
+                }
+            });
+        }
+    });
+</script>
+@endsection

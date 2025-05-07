@@ -44,4 +44,22 @@
             </x-primary-button>
         </div>
     </form>
+
+    <div class="mt-4">
+        <div class="text-center mb-3">
+            <span class="divider">{{ __('أو إنشاء حساب باستخدام') }}</span>
+        </div>
+        
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ route('socialite.redirect', 'google') }}" class="btn btn-outline-danger w-100">
+                <i class="fab fa-google me-2"></i>Google
+            </a>
+            
+            <a href="{{ route('socialite.redirect', 'facebook') }}" class="btn btn-outline-primary w-100">
+                <i class="fab fa-facebook-f me-2"></i>Facebook
+            </a>
+        </div>
+    </div>
 </x-guest-layout>
+
+

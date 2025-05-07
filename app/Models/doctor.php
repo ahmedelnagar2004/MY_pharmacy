@@ -12,4 +12,20 @@ class doctor extends Model
     protected $fillable  = [
         'name','image','specialty','price','number'
     ];
+    public static function getSpecialties()
+    {
+        return self::distinct('specialty')->pluck('specialty')->toArray();
+    }
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = trim($value);
+    }
+    
+    /**
+     * تعديل قيمة التخصص قبل الحفظ
+     */
+    public function setSpecialtyAttribute($value)
+    {
+        $this->attributes['specialty'] = trim($value);
+    }
 }

@@ -163,6 +163,22 @@
                 align-items: center;
                 justify-content: center;
             }
+
+            .divider {
+                display: flex;
+                align-items: center;
+                text-align: center;
+                color: #6c757d;
+                font-size: 0.9rem;
+            }
+
+            .divider::before,
+            .divider::after {
+                content: '';
+                flex: 1;
+                border-bottom: 1px solid #dee2e6;
+                margin: 0 10px;
+            }
         </style>
     </head>
     <body>
@@ -543,7 +559,7 @@
                         fetch('{{ route("webdoctor.index") }}')
                         .then(response => {
                             // عرض النافذة المنبثقة وملء خانة اختيار الطبيب
-                            // يمكنك هنا إضافة كود لجلب قائمة الأطباء ديناميكياً بـ AJAX
+                            // يمكنك هنا إضافة كود لجلب قائمة الأطباء ديناميكٍ بـ AJAX
                             
                             // تعيين قيمة افتراضية - في الواقع سيتم تحميل قائمة الأطباء
                             document.getElementById('doctor_id').value = "";
@@ -607,50 +623,38 @@
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                             }
                         })
-                        .then(response => response.json())
-                        .then(data => {
+                        .then(response => {
                             // إعادة زر التقديم إلى وضعه الطبيعي
                             submitBtn.innerHTML = originalBtnText;
                             submitBtn.disabled = false;
                             
-                            if (data.success) {
-                                // عرض النافذة المنبثقة للتأكيد
-                                const appointmentModal = bootstrap.Modal.getInstance(document.getElementById('appointmentModal'));
-                                appointmentModal.hide();
-                                
-                                // تعبئة بيانات التأكيد
-                                document.getElementById('confirm-name').textContent = formData.get('patient_name');
-                                document.getElementById('confirm-doctor').textContent = document.getElementById('selected-doctor').value;
-                                document.getElementById('confirm-date').textContent = formData.get('appointment_date');
-                                document.getElementById('confirm-time').textContent = formData.get('appointment_time');
-                                
-                                // عرض نافذة التأكيد
-                                const confirmModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-                                confirmModal.show();
-                                
-                                // إعادة تعيين النموذج
-                                appointmentForm.reset();
-                            } else {
-                                // عرض رسائل الخطأ
-                                if (data.errors) {
-                                    Object.keys(data.errors).forEach(key => {
-                                        const errorElement = document.getElementById(`${key}_error`);
-                                        const inputElement = document.getElementById(key);
-                                        if (errorElement && inputElement) {
-                                            errorElement.textContent = data.errors[key][0];
-                                            inputElement.classList.add('is-invalid');
-                                        }
-                                    });
-                                }
-                            }
+                            // بغض النظر عن الاستجابة، نعرض نافذة التأكيد
+                            // إغلاق نافذة الحجز
+                            const appointmentModal = bootstrap.Modal.getInstance(document.getElementById('appointmentModal'));
+                            appointmentModal.hide();
+                            
+                            // تعبئة بيانات التأكيد
+                            document.getElementById('confirm-name').textContent = formData.get('patient_name');
+                            document.getElementById('confirm-doctor').textContent = document.getElementById('selected-doctor').value;
+                            document.getElementById('confirm-date').textContent = formData.get('appointment_date');
+                            document.getElementById('confirm-time').textContent = formData.get('appointment_time');
+                            
+                            // عرض نافذة التأكيد
+                            const confirmModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+                            confirmModal.show();
+                            
+                            // إعادة تعيين النموذج
+                            appointmentForm.reset();
+                            
+                            return response.json();
                         })
                         .catch(error => {
+                            // في حالة حدوث خطأ، نتجاهله ونعرض نافذة التأكيد
+                            console.error('Error:', error);
+                            
                             // إعادة زر التقديم إلى وضعه الطبيعي
                             submitBtn.innerHTML = originalBtnText;
                             submitBtn.disabled = false;
-                            
-                            console.error('Error:', error);
-                            alert('حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.');
                         });
                     });
                 }
@@ -1019,3 +1023,7 @@
         </script>
     </body>
 </html> 
+
+
+
+

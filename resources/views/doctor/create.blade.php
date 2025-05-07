@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <x-slot name="header">
+        <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <h2 class="fw-bold m-0">

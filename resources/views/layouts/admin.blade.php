@@ -337,7 +337,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('admin.reports.index') }}">
                                 <i class="fas fa-chart-line"></i>
                                 <span>التقارير</span>
                             </a>

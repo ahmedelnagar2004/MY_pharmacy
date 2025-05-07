@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\OrderItem;
 use App\Models\Order;
+use App\Exports\OrdersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Http\Request;
 
@@ -43,16 +45,11 @@ class ShowOrederController extends Controller
     }
     
     /**
-     * تصدير قائمة الطلبات إلى ملف Excel/CSV
+     * تصدير قائمة الطلبات إلى ملف Excel
      */
     public function export()
     {
-        $orders = Order::with('items')->orderBy('created_at', 'desc')->get();
-        
-        // يمكن استكمال هذه الوظيفة لاحقًا لتصدير البيانات
-        // باستخدام مكتبات مثل Laravel Excel
-        
-        return back()->with('info', 'سيتم تفعيل وظيفة التصدير قريبًا');
+        return Excel::download(new OrdersExport, 'orders.xlsx');
     }
     
     /**
@@ -72,3 +69,4 @@ class ShowOrederController extends Controller
         return view('admin.orders.index', compact('orders', 'keyword'));
     }
 }
+
