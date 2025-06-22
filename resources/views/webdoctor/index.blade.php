@@ -15,19 +15,16 @@
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body p-3">
                 <form action="{{ route('webdoctor.search') }}" method="GET" id="search-form">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                            <label for="search-input" class="form-label mb-1">بحث بالاسم أو التخصص</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
-                                <input type="text" name="search" class="form-control border-start-0" placeholder="ابحث عن طبيب بالاسم أو التخصص..." value="{{ request('search') }}" id="search-input" autocomplete="off">
-                                @if(request('search'))
-                                    <button type="button" class="btn btn-light border" id="clear-search">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                @endif
+                                <input type="text" name="search" class="form-control border-start-0" placeholder="ابحث..." value="{{ request('search') }}" id="search-input" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-md-3">
+                            <label for="specialty-select" class="form-label mb-1">التخصص</label>
                             <select name="specialty" class="form-select" id="specialty-select">
                                 <option value="كل التخصصات" {{ request('specialty') == 'كل التخصصات' || !request('specialty') ? 'selected' : '' }}>كل التخصصات</option>
                                 @foreach($specialties as $specialty)
@@ -35,9 +32,27 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-1">
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="fas fa-search"></i>
+                        <div class="col-md-2">
+                            <label for="location-select" class="form-label mb-1">المحافظة</label>
+                            <select name="location" class="form-select" id="location-select">
+                                <option value="">كل المحافظات</option>
+                                @foreach($locations as $location)
+                                    <option value="{{ $location }}" {{ request('location') == $location ? 'selected' : '' }}>{{ $location }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="city-select" class="form-label mb-1">المدينة</label>
+                            <select name="tow_location" class="form-select" id="city-select">
+                                <option value="">كل المدن</option>
+                                @foreach($cities as $city)
+                                    <option value="{{ $city }}" {{ request('tow_location') == $city ? 'selected' : '' }}>{{ $city }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> بحث
                             </button>
                         </div>
                     </div>
@@ -80,6 +95,14 @@
                                     <div class="d-flex justify-content-between small py-1">
                                         <span class="text-muted">رقم الهاتف:</span>
                                         <span class="fw-bold">{{ $doctor->number }}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between small py-1">
+                                        <span class="text-muted">المحافظه:</span>
+                                        <span class="fw-bold">{{ $doctor->location }}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between small py-1">
+                                        <span class="text-muted">المدينه:</span>
+                                        <span class="fw-bold">{{ $doctor->tow_location }}</span>
                                     </div>
                                 </div>
                             </div>

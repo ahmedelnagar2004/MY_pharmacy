@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 
 class WebDoctorController extends BaseController
 {
@@ -47,6 +48,16 @@ class WebDoctorController extends BaseController
             $query->where('specialty', $request->specialty);
         }
         
+        // التصفية حسب المحافظة
+        if ($request->has('location') && !empty($request->location)) {
+            $query->where('location', $request->location);
+        }
+        
+        // التصفية حسب المدينة
+        if ($request->has('tow_location') && !empty($request->tow_location)) {
+            $query->where('tow_location', $request->tow_location);
+        }
+        
         // ترتيب النتائج
         $query->orderBy('name', 'asc');
         
@@ -55,7 +66,10 @@ class WebDoctorController extends BaseController
         // الحصول على قائمة التخصصات المتاحة
         $specialties = doctor::distinct('specialty')->pluck('specialty')->toArray();
         
-        return view('webdoctor.index', compact('doctors', 'specialties'));
+        $locations = doctor::distinct('location')->pluck('location')->toArray();
+        $cities = doctor::distinct('tow_location')->pluck('tow_location')->toArray();
+        
+        return view('webdoctor.index', compact('doctors', 'specialties', 'locations', 'cities'));
     }
     
     /**
@@ -84,7 +98,7 @@ class WebDoctorController extends BaseController
     public function debug(Request $request)
     {
         // التحقق من وجود مستخدم مسجل الدخول
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             abort(403);
         }
         

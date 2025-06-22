@@ -325,7 +325,7 @@
                                     <div class="col-md-6">
                                         <label for="appointment_time" class="form-label">وقت الموعد <span class="text-danger">*</span></label>
                                         <input type="time" class="form-control" id="appointment_time" name="appointment_time" required>
-                                        <div class="invalid-feedback" id="appointment_time_error"></div>
+                                        <div class="invalid-feedback d-block" id="time-error-js" style="display:none"></div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="selected-doctor" class="form-label">الطبيب</label>
@@ -607,6 +607,14 @@
                         // جمع بيانات النموذج
                         const formData = new FormData(appointmentForm);
                         
+                        // إخفاء رسالة الخطأ قبل كل محاولة إرسال
+                        const timeError = document.getElementById('time-error-js');
+                        if (timeError) {
+                            timeError.textContent = '';
+                            timeError.style.display = 'none';
+                            document.getElementById('appointment_time').classList.remove('is-invalid');
+                        }
+                        
                         // زر التقديم - إظهار حالة التحميل
                         const submitBtn = document.getElementById('submit-appointment');
                         const originalBtnText = submitBtn.innerHTML;
@@ -623,10 +631,22 @@
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                             }
                         })
-                        .then(response => {
+                        .then(async response => {
                             // إعادة زر التقديم إلى وضعه الطبيعي
                             submitBtn.innerHTML = originalBtnText;
                             submitBtn.disabled = false;
+                            
+                            if (response.status === 422) {
+                                const data = await response.json();
+                                // إظهار رسالة الخطأ تحت حقل الوقت
+                                const timeError = document.getElementById('time-error-js');
+                                if (timeError) {
+                                    timeError.textContent = data.message || 'هذا الموعد محجوز بالفعل لهذا الطبيب. اختر وقتًا آخر.';
+                                    timeError.style.display = 'block';
+                                    document.getElementById('appointment_time').classList.add('is-invalid');
+                                }
+                                return;
+                            }
                             
                             // بغض النظر عن الاستجابة، نعرض نافذة التأكيد
                             // إغلاق نافذة الحجز

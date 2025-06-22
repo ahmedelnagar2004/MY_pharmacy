@@ -33,6 +33,20 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="location" class="form-label">المحافظه <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" value="{{ old('location', $doctor->location) }}" required>
+                                        @error('location')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="tow_location" class="form-label"> المدينه</label>
+                                        <input type="text" class="form-control @error('tow_location') is-invalid @enderror" id="tow_location" name="tow_location" value="{{ old('tow_location', $doctor->tow_location) }}">
+                                        @error('tow_location')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     
                                     <div class="mb-3">
                                         <label for="specialty" class="form-label">التخصص <span class="text-danger">*</span></label>
@@ -80,21 +94,8 @@
                                         <div class="form-text">اترك هذا الحقل فارغاً إذا كنت لا ترغب في تغيير الصورة</div>
                                     </div>
                                 </div>
-                            </div>
                             
-                            <h5 class="border-bottom pb-2 mb-3">صور إضافية (اختياري)</h5>
-                            <div class="row mb-4">
-                                @for ($i = 1; $i <= 5; $i++)
-                                <div class="col-md-2 mb-3">
-                                    <label for="image-{{ $i }}" class="form-label">صورة {{ $i }}</label>
-                                    @if(isset($doctor->{"image-$i"}))
-                                    <div class="mb-2">
-                                        <img src="{{ asset('storage/' . $doctor->{"image-$i"}) }}" class="img-thumbnail" style="height: 80px;">
-                                    </div>
-                                    @endif
-                                    <input type="file" class="form-control" id="image-{{ $i }}" name="image-{{ $i }}" accept="image/*">
-                                </div>
-                                @endfor
+                            
                             </div>
                             
                             <div class="d-flex justify-content-end pt-3 border-top">

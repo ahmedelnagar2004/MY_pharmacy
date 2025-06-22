@@ -23,17 +23,29 @@
                         <h5 class="mb-0"><i class="fas fa-calendar-plus text-primary me-2"></i>نموذج حجز موعد</h5>
                     </div>
                     <div class="card-body p-4">
-                        @if($errors->any())
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        @if ($errors->any())
                             <div class="alert alert-danger">
-                                <ul class="mb-0">
-                                    @foreach($errors->all() as $error)
+                                <ul>
+                                    @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
                             </div>
                         @endif
 
-                        <form action="{{ route('appointments.store') }}" method="POST">
+                        @if (session('success'))
+                            <script>
+                                alert("{{ session('success') }}");
+                            </script>
+                        @endif
+
+                        <form id="appointmentForm" action="{{ route('appointments.store') }}" method="POST">
                             @csrf
                             
                             <div class="row mb-3">
@@ -104,7 +116,7 @@
                             
                             <div class="d-flex justify-content-end mt-4">
                                 <button type="reset" class="btn btn-outline-secondary me-2">إعادة تعيين</button>
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
                                     <i class="fas fa-calendar-check me-1"></i> تأكيد الحجز
                                 </button>
                             </div>
@@ -114,4 +126,59 @@
             </div>
         </div>
     </div>
-</x-user-layout> 
+</x-user-layout>
+
+<script>
+    document.getElementById('appointmentForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const submitBtn = document.getElementById('submitBtn');
+        const originalBtnText = submitBtn.innerHTML;
+
+        // إرسال الطلب
+        fetch('{{ route("appointments.store") }}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(async response => {
+            // إعادة زر التقديم إلى وضعه الطبيعي
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+
+            if (response.ok) {
+                // نجاح الحجز
+                const appointmentModal = bootstrap.Modal.getInstance(document.getElementById('appointmentModal'));
+                appointmentModal.hide();
+
+                // تعبئة بيانات التأكيد
+                document.getElementById('confirm-name').textContent = formData.get('patient_name');
+                document.getElementById('confirm-doctor').textContent = document.getElementById('selected-doctor').value;
+                document.getElementById('confirm-date').textContent = formData.get('appointment_date');
+                document.getElementById('confirm-time').textContent = formData.get('appointment_time');
+
+                // عرض نافذة التأكيد
+                const confirmModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+                confirmModal.show();
+
+                appointmentForm.reset();
+            } else if (response.status === 422) {
+                // فشل الحجز (مثل تعارض الموعد)
+                const data = await response.json();
+                alert(data.message || 'حدث خطأ أثناء الحجز. حاول مرة أخرى.');
+            } else {
+                alert('حدث خطأ غير متوقع. حاول مرة أخرى.');
+            }
+        })
+        .catch(error => {
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+            alert('حدث خطأ أثناء معالجة الطلب. حاول مرة أخرى.');
+        });
+    });
+</script> 

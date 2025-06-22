@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('specialty');
             $table->integer('price');
             $table->integer('number');
+            $table->string('location');
+            $table->string('tow_location')->nullable();
             $table->timestamps();
         });
     }

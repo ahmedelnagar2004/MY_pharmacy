@@ -33,6 +33,14 @@
                                 <span>{{ $doctor->number }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="fw-bold">المحافظه:</span>
+                                <span>{{ $doctor->location }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="fw-bold">المدينه:</span>
+                                <span>{{ $doctor->tow_location }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-2 border-bottom">
                                 <span class="fw-bold">سعر الكشف:</span>
                                 <span>{{ $doctor->price }} ج.م</span>
                             </div>

@@ -32,6 +32,20 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="location" class="form-label">المحافظه <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" value="{{ old('location') }}" required>
+                                        @error('location')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="tow_location" class="form-label"> المدينه</label>
+                                        <input type="text" class="form-control @error('tow_location') is-invalid @enderror" id="tow_location" name="tow_location" value="{{ old('tow_location') }}">
+                                        @error('tow_location')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     
                                     <div class="mb-3">
                                         <label for="specialty" class="form-label">التخصص <span class="text-danger">*</span></label>

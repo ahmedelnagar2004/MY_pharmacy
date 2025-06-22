@@ -43,6 +43,19 @@ class AppointmentController extends Controller
             'notes' => 'nullable|string',
         ]);
         
+        // التحقق من عدم وجود حجز لنفس الطبيب في نفس اليوم والوقت
+        $exists = Appointment::where('doctor_id', $request->doctor_id)
+            ->where('appointment_date', $request->appointment_date)
+            ->where('appointment_time', $request->appointment_time)
+            ->exists();
+        
+        if ($exists) {
+            if ($request->ajax()) {
+                return response()->json(['message' => 'هذا الموعد محجوز بالفعل لهذا الطبيب. اختر وقتًا آخر.'], 422);
+            }
+          //  return back()->withErrors(['appointment_time' => 'هذا الموعد محجوز بالفعل لهذا الطبيب. اختر وقتًا آخر.'])->withInput();
+        }
+        
         // إنشاء الحجز الجديد
         $appointment = Appointment::create([
             'patient_name' => $request->patient_name,

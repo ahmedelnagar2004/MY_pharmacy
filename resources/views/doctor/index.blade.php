@@ -36,6 +36,8 @@
                                 <th scope="col">اسم الطبيب</th>
                                 <th scope="col">التخصص</th>
                                 <th scope="col">سعر الكشف</th>
+                                <th scope="col">المحافظه</th>
+                                <th scope="col">المدينه</th>
                                 <th scope="col">رقم الهاتف</th>
                                 <th scope="col">الإجراءات</th>
                             </tr>
@@ -50,6 +52,8 @@
                                     <td>{{ $doctor->name }}</td>
                                     <td>{{ $doctor->specialty }}</td>
                                     <td>{{ $doctor->price }} ج.م</td>
+                                    <td>{{ $doctor->location }}</td>
+                                    <td>{{ $doctor->tow_location }}</td>
                                     <td>{{ $doctor->number }}</td>
                                     <td>
                                         <div class="btn-group" role="group">

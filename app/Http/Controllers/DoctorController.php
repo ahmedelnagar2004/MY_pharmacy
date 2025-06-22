@@ -30,8 +30,11 @@ class DoctorController extends BaseController
             'name' => 'required|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'specialty' => 'required|string|max:225',
-            'price' => 'required',
-            'number' => 'required'
+            'price' => 'required|numeric|min:0',
+            'number' => 'required|numeric|min:0|unique:doctors,number',
+            'location' => 'required|string|max:255',
+            'tow_location' => 'nullable|string|max:255',
+           
         ]);
         
         $doctor = new doctor($validatedData);
