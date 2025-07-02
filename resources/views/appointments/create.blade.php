@@ -152,21 +152,9 @@
             submitBtn.disabled = false;
 
             if (response.ok) {
-                // نجاح الحجز
-                const appointmentModal = bootstrap.Modal.getInstance(document.getElementById('appointmentModal'));
-                appointmentModal.hide();
-
-                // تعبئة بيانات التأكيد
-                document.getElementById('confirm-name').textContent = formData.get('patient_name');
-                document.getElementById('confirm-doctor').textContent = document.getElementById('selected-doctor').value;
-                document.getElementById('confirm-date').textContent = formData.get('appointment_date');
-                document.getElementById('confirm-time').textContent = formData.get('appointment_time');
-
-                // عرض نافذة التأكيد
-                const confirmModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
-                confirmModal.show();
-
-                appointmentForm.reset();
+                const data = await response.json();
+                // إعادة توجيه المستخدم لصفحة النجاح
+                window.location.href = `/appointments/success/${data.appointment_id}`;
             } else if (response.status === 422) {
                 // فشل الحجز (مثل تعارض الموعد)
                 const data = await response.json();

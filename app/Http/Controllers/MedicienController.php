@@ -35,6 +35,8 @@ class MedicienController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'propose' => 'required|string|max:225',
             'price' => 'required|numeric|min:0',
+            'type' => 'required|string|max:225',
+            'count' => 'required|numeric|min:0',
         ]);
         
         $medicien = new medicien($validatedData);
@@ -75,6 +77,8 @@ class MedicienController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'propose' => 'required|string|max:225',
             'price' => 'required|numeric|min:0',
+            'type' => 'required|string|max:225',
+            'count' => 'required|numeric|min:0',
         ]);
         
         $medicien->name = $validatedData['name'];

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Notifications\NewUserNotification;
+use App\Models\Admin;
 
 class RegisteredUserController extends Controller
 {
@@ -44,6 +46,8 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+
+        User::first()->notify(new NewUserNotification($user));
 
         return redirect(route('dashboard', absolute: false));
     }

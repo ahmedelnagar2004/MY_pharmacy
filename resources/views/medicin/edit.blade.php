@@ -41,6 +41,20 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="type" class="form-label">نوع الدواء <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control @error('type') is-invalid @enderror" id="type" name="type" value="{{ old('type', $medicien->type) }}" required>
+                                        @error('type')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="count" class="form-label">العدد <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control @error('count') is-invalid @enderror" id="count" name="count" value="{{ old('count', $medicien->count) }}" required>
+                                        @error('count')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     
                                     <div class="mb-3">
                                         <label for="price" class="form-label">سعر الدواء <span class="text-danger">*</span></label>

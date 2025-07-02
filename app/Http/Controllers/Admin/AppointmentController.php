@@ -6,6 +6,8 @@ use App\Models\Appointment;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Notifications\NewAppointmentNotification;
+use App\Models\User;
 
 class AppointmentController extends Controller
 {
@@ -68,7 +70,17 @@ class AppointmentController extends Controller
             'status' => 'pending',
         ]);
         
-        // إعادة التوجيه مع رسالة نجاح
+        // إرسال الإشعار عند حدوث الحدث
+        Appointment::first()->notify(new NewAppointmentNotification($appointment));
+        
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'تم الحجز بنجاح!',
+                'appointment_id' => $appointment->id,
+                // يمكنك إضافة بيانات أخرى هنا إذا أردت
+            ]);
+        }
         return redirect()->route('appointments.success', $appointment->id)
                          ->with('success', 'تم حجز موعدك بنجاح، سيتم التواصل معك لتأكيد الحجز.');
     }

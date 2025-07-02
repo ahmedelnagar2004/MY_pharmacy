@@ -50,6 +50,7 @@
                                 <th>المبلغ الإجمالي</th>
                                 <th>الحالة</th>
                                 <th>تاريخ الطلب</th>
+                                <th> الوقت</th>
                                 <th>العمليات</th>
                             </tr>
                         </thead>
@@ -78,7 +79,8 @@
                                             <span class="badge bg-danger">ملغي</span>
                                         @endif
                                     </td>
-                                    <td>{{ $order->created_at->format('Y-m-d H:i') }}</td>
+                                    <td>{{ $order->created_at->format('Y-m-d') }}</td>
+                                    <td>{{ $order->created_at->format('h:i A') }}</td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
                                             <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-info">

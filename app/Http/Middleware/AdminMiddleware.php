@@ -5,28 +5,27 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         // التحقق من تسجيل الدخول
         if (!Auth::check()) {
-            return redirect('/login');
+            return redirect()->route('login')->with('error', 'يجب تسجيل الدخول أولاً');
         }
-        
-        // التحقق من صلاحية المستخدم
+
+        // التحقق من أن المستخدم مدير
         if (Auth::user()->role !== 'admin') {
-            return redirect('/')->with('error', 'ليس لديك صلاحية للوصول إلى هذه الصفحة');
+            return redirect()->route('home')->with('error', 'ليس لديك صلاحية للوصول للوحة التحكم');
         }
-        
+
         return $next($request);
     }
 } 

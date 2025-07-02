@@ -42,6 +42,14 @@
                                 <span>{{ $medicien->propose }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-3 border-bottom">
+                                <span class="fw-bold">النوع:</span>
+                                <span>{{ $medicien->type }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-3 border-bottom">
+                                <span class="fw-bold">العدد:</span>
+                                <span>{{ $medicien->count }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between py-3 border-bottom">
                                 <span class="fw-bold">السعر:</span>
                                 <span class="text-primary fw-bold">{{ $medicien->price }} ج.م</span>
                             </div>

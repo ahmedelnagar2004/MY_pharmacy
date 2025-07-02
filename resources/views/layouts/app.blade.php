@@ -147,6 +147,29 @@
             .user-dropdown .dropdown-toggle:hover {
                 background-color: rgba(15, 104, 72, 0.1);
             }
+            
+            #ai-chat-fab {
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                z-index: 9999;
+                background: #0d6efd;
+                color: #fff;
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                font-size: 2rem;
+                transition: background 0.2s;
+                text-decoration: none;
+            }
+            #ai-chat-fab:hover {
+                background: #0b5ed7;
+                color: #fff;
+            }
         </style>
     </head>
     <body>

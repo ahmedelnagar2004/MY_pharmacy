@@ -21,5 +21,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::component('layouts.user', 'user-layout');
+        $locale = session('locale', config('app.locale'));
+        app()->setLocale($locale);
     }
 }

@@ -9,7 +9,8 @@
 
         <!-- Bootstrap CSS RTL -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css" integrity="sha384-gXt9imSW0VcJVHezoNQsP+TNrjYXoGcrqBZJpry9zJt8PCQjobwmhMGaDHTASo9N" crossorigin="anonymous">
-        
+           <!-- Font Awesome CDN -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         
@@ -376,39 +377,15 @@
                             <button class="btn position-relative" type="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-bell"></i>
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    3
+                                    {{ auth()->user()->unreadNotifications->count() }}
                                 </span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="notificationsDropdown" style="width: 300px;">
                                 <li><h6 class="dropdown-header">الإشعارات</h6></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                                <i class="fas fa-user-md"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-0">طبيب جديد مسجل</h6>
-                                            <p class="text-muted mb-0 small">تم تسجيل د. أحمد محمد منذ 5 دقائق</p>
-                                        </div>
-                                    </div>
-                                </a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">
-                                    <div class="d-flex">
-                                        <div class="flex-shrink-0">
-                                            <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                                <i class="fas fa-pills"></i>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-0">تنبيه مخزون</h6>
-                                            <p class="text-muted mb-0 small">باراسيتامول قارب على النفاذ</p>
-                                        </div>
-                                    </div>
-                                </a></li>
+                                @foreach(auth()->user()->unreadNotifications as $notification)
+                                    <li><a class="dropdown-item" href="#">{{ $notification->data['message'] }}</a></li>
+                                @endforeach
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-center" href="#">عرض جميع الإشعارات</a></li>
                             </ul>

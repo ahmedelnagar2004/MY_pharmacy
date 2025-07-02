@@ -25,10 +25,9 @@
                         <div class="col-md-3">
                             <select name="type" class="form-select">
                                 <option value="all" {{ request('type') == 'all' ? 'selected' : '' }}>كل الأنواع</option>
-                                <option value="مسكن" {{ request('type') == 'مسكن' ? 'selected' : '' }}>مسكن</option>
-                                <option value="مضاد حيوي" {{ request('type') == 'مضاد حيوي' ? 'selected' : '' }}>مضاد حيوي</option>
-                                <option value="فيتامينات" {{ request('type') == 'فيتامينات' ? 'selected' : '' }}>فيتامينات</option>
-                                <option value="أدوية القلب" {{ request('type') == 'أدوية القلب' ? 'selected' : '' }}>أدوية القلب</option>
+                                @foreach($types as $type)
+                                    <option value="{{ $type }}" {{ request('type') == $type ? 'selected' : '' }}>{{ $type }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-1">
@@ -75,7 +74,7 @@
                                     <div class="row text-center">
                                         <div class="col-6 border-end">
                                             <small class="text-muted d-block">الفئة</small>
-                                            <span class="fw-semibold">أدوية عامة</span>
+                                            <span class="fw-semibold">{{ $medicien->type }}</span>
                                         </div>
                                         <div class="col-6">
                                             <small class="text-muted d-block">الكمية</small>

@@ -28,4 +28,9 @@ class doctor extends Model
     {
         $this->attributes['specialty'] = trim($value);
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class, 'doctor_id');
+    }
 }

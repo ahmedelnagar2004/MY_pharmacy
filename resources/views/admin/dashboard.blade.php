@@ -33,7 +33,10 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="text-muted mb-1">إجمالي الأطباء</h6>
-                                <h3 class="mb-0 fw-bold">{{ $totalDoctors }}</h3>
+                                <h3 class="mb-0 fw-bold">
+                                    <i class="fas fa-user-md me-2 text-primary"></i>
+                                    {{ $totalDoctors }}
+                                </h3>
                                 <div class="small text-success mt-2">
                                     <i class="fas fa-user-md me-1"></i>
                                     <span>عدد الأطباء المسجلين في النظام</span>
@@ -57,7 +60,10 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="text-muted mb-1">إجمالي الأدوية</h6>
-                                <h3 class="mb-0 fw-bold">{{ $totalMedicines }}</h3>
+                                <h3 class="mb-0 fw-bold">
+                                    <i class="fas fa-pills me-2 text-success"></i>
+                                    {{ $totalMedicines }}
+                                </h3>
                                 <div class="small text-success mt-2">
                                     <i class="fas fa-pills me-1"></i>
                                     <span>عدد الأدوية المتوفرة في النظام</span>
@@ -81,7 +87,10 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="text-muted mb-1">إجمالي المستخدمين</h6>
-                                <h3 class="mb-0 fw-bold">{{ $totalUsers }}</h3>
+                                <h3 class="mb-0 fw-bold">
+                                    <i class="fas fa-users me-2 text-info"></i>
+                                    {{ $totalUsers }}
+                                </h3>
                                 <div class="small text-success mt-2">
                                     <i class="fas fa-users me-1"></i>
                                     <span>عدد المستخدمين المسجلين في النظام</span>

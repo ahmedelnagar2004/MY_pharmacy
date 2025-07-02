@@ -8,11 +8,14 @@ use App\Http\Controllers\MedicienController;
 use App\Http\Controllers\WebMedicienController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AIChatController;
 use App\Http\Controllers\admin\AppointmentController;
 use App\Http\Controllers\ShowOrederController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Auth\SocialiteController;
+use Illuminate\Support\Facades\Schema;
+use App\Http\Controllers\LangController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -164,3 +167,8 @@ Route::get('/debug/socialite/detailed', function() {
     ]);
 });
 
+Route::post('/ask-ai', [AIChatController::class, 'ask'])->name('ai.ask');
+
+Route::view('/ai-chat', 'ai-chat')->name('ai.chat');
+
+Route::get('lang/{locale}', [LangController::class, 'switchLang'])->name('lang.switch');

@@ -35,6 +35,8 @@
                                 <th scope="col">اسم الدواء</th>
                                 <th scope="col">الغرض</th>
                                 <th scope="col">السعر</th>
+                                <th scope="col">النوع</th>
+                                <th scope="col">العدد</th>
                                 <th scope="col">الإجراءات</th>
                             </tr>
                         </thead>
@@ -48,6 +50,8 @@
                                     <td>{{ $medicien->name }}</td>
                                     <td>{{ $medicien->propose }}</td>
                                     <td>{{ $medicien->price }} ج.م</td>
+                                    <td>{{ $medicien->type }}</td>
+                                    <td>{{ $medicien->count }}</td>
                                     <td>
                                         <div class="btn-group" role="group">
                                             <a href="{{ route('medicien.show', $medicien->id) }}" class="btn btn-sm btn-outline-primary">

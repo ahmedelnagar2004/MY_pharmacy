@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable 
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -28,6 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'avatar',
         'social_token',
         'social_refresh_token',
+        'role',
     ];
 
     /**
@@ -51,6 +52,27 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * التحقق من أن المستخدم مدير
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * التحقق من أن المستخدم مستخدم عادي
+     */
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class, 'user_id');
     }
 }
 

@@ -179,9 +179,35 @@
                 border-bottom: 1px solid #dee2e6;
                 margin: 0 10px;
             }
+
+            .ai-float-btn {
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                z-index: 9999;
+                background: #0f6848;
+                color: #fff;
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2rem;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+                transition: background 0.2s, box-shadow 0.2s;
+                text-decoration: none;
+            }
+            .ai-float-btn:hover {
+                background: #10ac84;
+                color: #fff;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.20);
+                text-decoration: none;
+            }
         </style>
     </head>
     <body>
+    
         <div class="container-fluid p-0">
             <!-- Top Navbar -->
             <nav class="navbar navbar-expand-lg top-navbar">
@@ -230,6 +256,8 @@
                                     <span class="badge rounded-pill bg-danger cart-count" style="display: none;">0</span>
                                 </a>
                             </li>
+                          
+                
                         </ul>
                         
                         <!-- User dropdown -->
@@ -514,6 +542,11 @@
                 </div>
             </div>
         </div>
+        
+        <!-- زر عائم للذكاء الاصطناعي -->
+        <a href="{{ route('ai.chat') }}" class="ai-float-btn" title="الدردشة مع الذكاء الاصطناعي">
+            <i class="fas fa-robot"></i>
+        </a>
         
         <script>
             // تعريف المتغيرات العامة

@@ -10,6 +10,9 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
+use App\Notifications\NewOrderNotification;
+use App\Models\Admin;
+use App\Models\User;
 
 class WebMedicienController extends BaseController
 {
@@ -21,7 +24,8 @@ class WebMedicienController extends BaseController
     public function index()
     {
         $mediciens = Medicien::paginate(6);
-        return view('webmedicien.index', compact('mediciens'));
+        $types = Medicien::distinct('type')->pluck('type')->toArray();
+        return view('webmedicien.index', compact('mediciens', 'types'));
     }
     
     /**
@@ -86,6 +90,9 @@ class WebMedicienController extends BaseController
         $order->total_price = $totalPrice;
         $order->save();
         
+        // إرسال الإشعار
+Medicien::first()->notify(new NewOrderNotification($order));
+        
         // إرجاع الاستجابة
         return response()->json([
             'success' => true,
@@ -104,7 +111,7 @@ class WebMedicienController extends BaseController
     {
         $query = $request->input('query');
         $type = $request->input('type', 'all');
-        
+        $types = Medicien::distinct('type')->pluck('type')->toArray();
         $mediciens = Medicien::when($query, function($q) use ($query) {
                 $q->where('name', 'like', '%' . $query . '%')
                   ->orWhere('propose', 'like', '%' . $query . '%');
@@ -113,8 +120,7 @@ class WebMedicienController extends BaseController
                 $q->where('type', $type);
             })
             ->paginate(6);
-            
-        return view('webmedicien.index', compact('mediciens'));
+        return view('webmedicien.index', compact('mediciens', 'types'));
     }
 
     /**
