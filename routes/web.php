@@ -16,6 +16,8 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Auth\SocialiteController;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Controllers\LangController;
+use App\Http\Controllers\TechController;
+use App\Http\Middleware\AdminMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
@@ -58,7 +60,7 @@ Route::post('/appointments', [AppointmentController::class, 'store'])->name('app
 Route::get('/appointments/success/{id}', [AppointmentController::class, 'success'])->name('appointments.success');
 
 // مسارات لوحة التحكم الإدارية - متاحة فقط للإدارة
-Route::middleware(['auth'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     
     // مسارات إدارة الحجوزات
@@ -168,7 +170,8 @@ Route::get('/debug/socialite/detailed', function() {
 });
 
 Route::post('/ask-ai', [AIChatController::class, 'ask'])->name('ai.ask');
-
+Route::get('/tech', [TechController::class, 'index'])->name('tech.index');
 Route::view('/ai-chat', 'ai-chat')->name('ai.chat');
+
 
 Route::get('lang/{locale}', [LangController::class, 'switchLang'])->name('lang.switch');

@@ -34,7 +34,7 @@ class ShowOrederController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,processing,completed,canceled',
+            'status' => 'required|in:pending,processing,completed,cancelled',
         ]);
         
         $order = Order::findOrFail($id);

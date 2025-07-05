@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Notifications\NewAppointmentNotification;
 use App\Models\User;
+use App\Mail\AppointmentConfirmationMail;
+use Illuminate\Support\Facades\Mail;
 
 class AppointmentController extends Controller
 {
@@ -55,7 +57,7 @@ class AppointmentController extends Controller
             if ($request->ajax()) {
                 return response()->json(['message' => 'هذا الموعد محجوز بالفعل لهذا الطبيب. اختر وقتًا آخر.'], 422);
             }
-          //  return back()->withErrors(['appointment_time' => 'هذا الموعد محجوز بالفعل لهذا الطبيب. اختر وقتًا آخر.'])->withInput();
+            return back()->withErrors(['appointment_time' => 'هذا الموعد محجوز بالفعل لهذا الطبيب. اختر وقتًا آخر.'])->withInput();
         }
         
         // إنشاء الحجز الجديد
@@ -71,16 +73,24 @@ class AppointmentController extends Controller
         ]);
         
         // إرسال الإشعار عند حدوث الحدث
-        Appointment::first()->notify(new NewAppointmentNotification($appointment));
+        foreach (User::where('role', 'admin')->get() as $user) {
+     $user->notify(new NewAppointmentNotification($appointment));
+        }
         
-        if ($request->ajax() || $request->wantsJson()) {
+        // بعد إنشاء الحجز
+        if ($request->email) {
+            Mail::to($request->email)->send(new AppointmentConfirmationMail($appointment));
+        }
+        
+        // هذا الشرط يجب أن يكون أول شيء بعد إنشاء الحجز
+        if ($request->ajax() || $request->wantsJson() || $request->isJson() || $request->header('Accept') === 'application/json') {
             return response()->json([
                 'success' => true,
                 'message' => 'تم الحجز بنجاح!',
                 'appointment_id' => $appointment->id,
-                // يمكنك إضافة بيانات أخرى هنا إذا أردت
             ]);
         }
+
         return redirect()->route('appointments.success', $appointment->id)
                          ->with('success', 'تم حجز موعدك بنجاح، سيتم التواصل معك لتأكيد الحجز.');
     }

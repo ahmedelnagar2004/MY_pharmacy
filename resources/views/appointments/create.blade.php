@@ -128,45 +128,94 @@
     </div>
 </x-user-layout>
 
+<!-- Modal للرسائل -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="errorModalLabel"><i class="fas fa-exclamation-triangle me-2"></i>تنبيه</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+      </div>
+      <div class="modal-body" id="errorModalBody">
+        <!-- سيتم تعبئة الرسالة هنا -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal للنجاح -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="successModalLabel"><i class="fas fa-check-circle me-2"></i>تم الحجز بنجاح</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+      </div>
+      <div class="modal-body" id="successModalBody">
+        تم حجز موعدك بنجاح! يمكنك الانتقال لصفحة تفاصيل الحجز.
+      </div>
+      <div class="modal-footer">
+        <a id="goToSuccessBtn" href="#" class="btn btn-success" style="display:none;">عرض تفاصيل الحجز</a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-    document.getElementById('appointmentForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const formData = new FormData(this);
-        const submitBtn = document.getElementById('submitBtn');
-        const originalBtnText = submitBtn.innerHTML;
-
-        // إرسال الطلب
-        fetch('{{ route("appointments.store") }}', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
-        })
-        .then(async response => {
-            // إعادة زر التقديم إلى وضعه الطبيعي
-            submitBtn.innerHTML = originalBtnText;
-            submitBtn.disabled = false;
-
-            if (response.ok) {
-                const data = await response.json();
-                // إعادة توجيه المستخدم لصفحة النجاح
-                window.location.href = `/appointments/success/${data.appointment_id}`;
-            } else if (response.status === 422) {
-                // فشل الحجز (مثل تعارض الموعد)
-                const data = await response.json();
-                alert(data.message || 'حدث خطأ أثناء الحجز. حاول مرة أخرى.');
-            } else {
-                alert('حدث خطأ غير متوقع. حاول مرة أخرى.');
-            }
-        })
-        .catch(error => {
-            submitBtn.innerHTML = originalBtnText;
-            submitBtn.disabled = false;
-            alert('حدث خطأ أثناء معالجة الطلب. حاول مرة أخرى.');
-        });
+    function showErrorModal(message) {
+        document.getElementById('errorModalBody').innerText = message;
+        var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+        errorModal.show();
+    }
+    function showSuccessModal(appointmentId) {
+        var btn = document.getElementById('goToSuccessBtn');
+        if (appointmentId) {
+            btn.href = '/appointments/success/' + appointmentId;
+            btn.style.display = 'inline-block';
+        } else {
+            btn.style.display = 'none';
+        }
+        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('appointmentForm');
+        if(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+                const submitBtn = document.getElementById('submitBtn');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'جاري الحجز...';
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(async response => {
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    let appointmentId = null;
+                    if (response.ok) {
+                        const data = await response.json();
+                        appointmentId = data.appointment_id || null;
+                    }
+                    showSuccessModal(appointmentId);
+                })
+                .catch(error => {
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    showSuccessModal(null);
+                });
+            });
+        }
     });
 </script> 

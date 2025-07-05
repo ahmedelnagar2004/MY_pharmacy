@@ -384,7 +384,7 @@
                                 <li><h6 class="dropdown-header">الإشعارات</h6></li>
                                 <li><hr class="dropdown-divider"></li>
                                 @foreach(auth()->user()->unreadNotifications as $notification)
-                                    <li><a class="dropdown-item" href="#">{{ $notification->data['message'] }}</a></li>
+                                    <li><a class="dropdown-item" href="#">{{ $notification->data['message'] ?? 'إشعار جديد' }}</a></li>
                                 @endforeach
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-center" href="#">عرض جميع الإشعارات</a></li>

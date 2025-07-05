@@ -75,7 +75,7 @@
                                             <span class="badge bg-primary">قيد التجهيز</span>
                                         @elseif ($order->status == 'completed')
                                             <span class="badge bg-success">مكتمل</span>
-                                        @elseif ($order->status == 'canceled')
+                                        @elseif ($order->status == 'cancelled')
                                             <span class="badge bg-danger">ملغي</span>
                                         @endif
                                     </td>
@@ -109,7 +109,7 @@
                                                                     <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>قيد الانتظار</option>
                                                                     <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>قيد التجهيز</option>
                                                                     <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>مكتمل</option>
-                                                                    <option value="canceled" {{ $order->status == 'canceled' ? 'selected' : '' }}>ملغي</option>
+                                                                    <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>ملغي</option>
                                                                 </select>
                                                             </div>
                                                         </div>

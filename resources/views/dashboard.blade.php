@@ -8,8 +8,8 @@
                 <p class="text-muted mb-0 mt-1">مرحباً، {{ Auth::user()->name }}! نتمنى لك يوماً سعيداً</p>
             </div>
             <div class="d-flex">
-                <a href="#" class="btn btn-sm btn-outline-primary">
-                    <i class="fas fa-search me-1"></i> البحث عن دواء
+                <a href="{{ route('tech.index') }}" class="btn btn-sm btn-outline-primary">
+                     الدعم الفني
                 </a>
             </div>
         </div>

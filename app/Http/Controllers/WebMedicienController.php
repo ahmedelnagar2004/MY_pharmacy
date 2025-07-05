@@ -91,7 +91,9 @@ class WebMedicienController extends BaseController
         $order->save();
         
         // إرسال الإشعار
-Medicien::first()->notify(new NewOrderNotification($order));
+        foreach (User::all() as $user) {
+            $user->notify(new NewOrderNotification($order));
+        }
         
         // إرجاع الاستجابة
         return response()->json([
