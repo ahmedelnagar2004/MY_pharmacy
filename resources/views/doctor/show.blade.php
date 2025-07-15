@@ -1,4 +1,4 @@
-<x-user-layout>
+<x-admin-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <div>
@@ -26,18 +26,17 @@
                         </div>
                         <h4 class="mb-1">د. {{ $doctor->name }}</h4>
                         <p class="text-primary mb-3">{{ $doctor->specialty }}</p>
-                        
                         <div class="doctor-info mt-4">
                             <div class="d-flex justify-content-between py-2 border-bottom">
                                 <span class="fw-bold">رقم الهاتف:</span>
                                 <span>{{ $doctor->number }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="fw-bold">المحافظه:</span>
+                                <span class="fw-bold">المحافظة:</span>
                                 <span>{{ $doctor->location }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="fw-bold">المدينه:</span>
+                                <span class="fw-bold">المدينة:</span>
                                 <span>{{ $doctor->tow_location }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-2 border-bottom">
@@ -49,19 +48,9 @@
                                 <span>{{ $doctor->created_at->format('Y-m-d') }}</span>
                             </div>
                         </div>
-                        
-                        <div class="doctor-actions mt-4">
-                            <a href="#" class="btn btn-primary w-100 mb-2">
-                                <i class="fas fa-calendar-check me-1"></i> حجز موعد
-                            </a>
-                            <a href="#" class="btn btn-outline-success w-100">
-                                <i class="fas fa-phone me-1"></i> اتصال
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
-            
             <!-- المزيد من المعلومات والصور -->
             <div class="col-lg-8">
                 <!-- الصور الإضافية -->
@@ -71,15 +60,10 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            @php
-                                $hasAdditionalImages = false;
-                            @endphp
-                            
+                            @php $hasAdditionalImages = false; @endphp
                             @for ($i = 1; $i <= 5; $i++)
                                 @if(isset($doctor->{"image-$i"}))
-                                    @php
-                                        $hasAdditionalImages = true;
-                                    @endphp
+                                    @php $hasAdditionalImages = true; @endphp
                                     <div class="col-md-4 mb-3">
                                         <a href="{{ asset('storage/' . $doctor->{"image-$i"}) }}" target="_blank">
                                             <img src="{{ asset('storage/' . $doctor->{"image-$i"}) }}" class="img-fluid rounded" alt="صورة إضافية {{ $i }}">
@@ -87,7 +71,6 @@
                                     </div>
                                 @endif
                             @endfor
-                            
                             @if(!$hasAdditionalImages)
                                 <div class="col-12 text-center py-4">
                                     <i class="fas fa-images fa-2x text-muted mb-2"></i>
@@ -97,8 +80,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- مواعيد الطبيب -->
+                <!-- جدول مواعيد الطبيب -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">مواعيد الطبيب</h5>
@@ -151,63 +133,63 @@
                         </div>
                     </div>
                 </div>
-                
                 <!-- آراء المرضى -->
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">آراء المرضى</h5>
+                        @if(isset($ratingsCount) && $ratingsCount > 0)
                         <div class="text-warning">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span class="ms-1 text-dark">(4.5)</span>
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($averageRating >= $i)
+                                    <i class="fas fa-star"></i>
+                                @elseif($averageRating >= $i - 0.5)
+                                    <i class="fas fa-star-half-alt"></i>
+                                @else
+                                    <i class="far fa-star"></i>
+                                @endif
+                            @endfor
+                            <span class="ms-1 text-dark">({{ number_format($averageRating, 1) }}) من 5 - {{ $ratingsCount }} تقييم</span>
                         </div>
+                        @else
+                        <span class="text-muted">لا يوجد تقييمات بعد</span>
+                        @endif
                     </div>
                     <div class="card-body">
+                        @if(isset($ratings))
+                        @forelse($ratings as $rating)
                         <div class="review-item pb-3 mb-3 border-bottom">
                             <div class="d-flex">
-                                <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="صورة المريض">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($rating->user->name ?? 'مستخدم') }}&background=0D8ABC&color=fff" class="rounded-circle me-3" width="50" height="50" alt="صورة المريض">
                                 <div>
-                                    <h6 class="mb-1">محمد أحمد</h6>
+                                    <h6 class="mb-1">{{ $rating->user->name ?? 'مستخدم' }}</h6>
                                     <div class="text-warning small">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
+                                        @for($i = 1; $i <= 5; $i++)
+                                            @if($rating->rating >= $i)
+                                                <i class="fas fa-star"></i>
+                                            @else
+                                                <i class="far fa-star"></i>
+                                            @endif
+                                        @endfor
                                     </div>
-                                    <p class="text-muted small">منذ أسبوع</p>
+                                    <p class="text-muted small">{{ $rating->created_at->diffForHumans() }}</p>
                                 </div>
                             </div>
-                            <p class="mt-2">دكتور ممتاز ومتعاون جداً. شرح جميع التفاصيل بوضوح وكان الكشف دقيق.</p>
+                            @if($rating->comment)
+                            <p class="mt-2">{{ $rating->comment }}</p>
+                            @endif
                         </div>
-                        <div class="review-item">
-                            <div class="d-flex">
-                                <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="صورة المريض">
-                                <div>
-                                    <h6 class="mb-1">سمر محمود</h6>
-                                    <div class="text-warning small">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                    <p class="text-muted small">منذ أسبوعين</p>
-                                </div>
-                            </div>
-                            <p class="mt-2">كشف دقيق وشرح واضح للحالة. سعر الكشف مناسب مقارنة بالخدمة الممتازة.</p>
-                        </div>
+                        @empty
+                        <div class="text-center text-muted">لا توجد تقييمات بعد.</div>
+                        @endforelse
+                        @endif
                     </div>
                     <div class="card-footer bg-white text-center">
-                        <a href="#" class="btn btn-outline-primary">
-                            <i class="fas fa-comment-medical me-1"></i> إضافة تقييم
+                        <a href="{{ route('rate.index', ['doctor_id' => $doctor->id]) }}" class="btn btn-outline-primary">
+                            <i class="fas fa-plus"></i> إضافة تقييم
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</x-user-layout> 
+</x-admin-layout> 

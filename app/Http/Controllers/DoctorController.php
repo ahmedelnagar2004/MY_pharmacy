@@ -132,6 +132,9 @@ class DoctorController extends BaseController
     public function show(string $id)
     {
         $doctor = doctor::findOrFail($id);
-        return view('doctor.show', compact('doctor'));
+        $ratings = $doctor->ratings()->with('user')->latest()->get();
+        $averageRating = $ratings->avg('rating');
+        $ratingsCount = $ratings->count();
+        return view('doctor.show', compact('doctor', 'ratings', 'averageRating', 'ratingsCount'));
     }
 }

@@ -173,5 +173,9 @@ Route::post('/ask-ai', [AIChatController::class, 'ask'])->name('ai.ask');
 Route::get('/tech', [TechController::class, 'index'])->name('tech.index');
 Route::view('/ai-chat', 'ai-chat')->name('ai.chat');
 
+// مسارات التقييم
+Route::get('/rate', [App\Http\Controllers\RateController::class, 'index'])->name('rate.index');
+Route::post('/rate', [App\Http\Controllers\RateController::class, 'store'])->middleware('auth')->name('rate.store');
+
 
 Route::get('lang/{locale}', [LangController::class, 'switchLang'])->name('lang.switch');

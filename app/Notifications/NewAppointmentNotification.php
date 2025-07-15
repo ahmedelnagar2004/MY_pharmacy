@@ -27,9 +27,9 @@ class NewAppointmentNotification extends Notification
      *
      * @return array<int, string>
      */
-    public function via(object $notifiable): array
+    public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['database', 'broadcast'];
     }
 
     /**

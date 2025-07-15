@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Appointment;
 
 class AppointmentConfirmationMail extends Mailable
 {
@@ -18,9 +19,9 @@ class AppointmentConfirmationMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct($appointment)
+    public function __construct(Appointment $appointment)
     {
-        $this->appointment = $appointment;
+        $this->appointment = $appointment->load('doctor');
     }
 
     /**

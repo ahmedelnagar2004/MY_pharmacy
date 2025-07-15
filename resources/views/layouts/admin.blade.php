@@ -470,5 +470,12 @@
                 });
             });
         </script>
+        <script>
+            window.Echo.private('App.Models.User.' + window.userId)
+                .notification((notification) => {
+                    // حدث جديد: حدث تحديث للأيقونة أو أضف الإشعار للقائمة
+                    updateNotificationIcon(notification);
+                });
+        </script>
     </body>
 </html> 

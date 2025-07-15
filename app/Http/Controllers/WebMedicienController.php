@@ -91,7 +91,7 @@ class WebMedicienController extends BaseController
         $order->save();
         
         // إرسال الإشعار
-        foreach (User::all() as $user) {
+        foreach (User::where('role', 'admin')->get() as $user) {
             $user->notify(new NewOrderNotification($order));
         }
         

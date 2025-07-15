@@ -81,7 +81,10 @@ class WebDoctorController extends BaseController
     public function show($id)
     {
         $doctor = doctor::findOrFail($id);
-        return view('webdoctor.show', compact('doctor'));
+        $ratings = $doctor->ratings()->with('user')->latest()->get();
+        $averageRating = $ratings->avg('rating');
+        $ratingsCount = $ratings->count();
+        return view('webdoctor.show', compact('doctor', 'ratings', 'averageRating', 'ratingsCount'));
     }
     
     /**

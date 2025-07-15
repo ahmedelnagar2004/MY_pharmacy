@@ -176,6 +176,12 @@
         </style>
     </head>
     <body>
+        @if(auth()->check())
+        <script>
+            window.userId = {{ auth()->id() }};
+        </script>
+        @endif
+
         <div class="container-fluid">
             <div class="row">
                 <!-- Sidebar -->
