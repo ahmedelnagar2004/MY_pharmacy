@@ -70,10 +70,18 @@ class WebMedicienController extends BaseController
             'status' => 'pending',
             'total_price' => 0, // سيتم تحديثه لاحقًا
         ]);
-        
         // حساب المجموع الكلي وإضافة العناصر
         $totalPrice = 0;
         foreach ($cartItems as $item) {
+            // التحقق من وجود كمية كافية
+            $medicine = Medicien::find($item->id);
+            if (!$medicine || $medicine->count < $item->quantity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'الكمية المطلوبة غير متوفرة للدواء: ' . ($medicine ? $medicine->name : 'غير معروف'),
+                ], 400);
+            }
+            
             // إنشاء سجل لعنصر الطلب
             $orderItem = OrderItem::create([
                 'order_id' => $order->id,
@@ -82,6 +90,9 @@ class WebMedicienController extends BaseController
                 'price' => $item->price,
                 'total' => $item->total,
             ]);
+            
+            // تحديث كمية المنتج بعد عملية الشراء
+            $medicine->decrement('count', $item->quantity);
             
             $totalPrice += $item->total;
         }
