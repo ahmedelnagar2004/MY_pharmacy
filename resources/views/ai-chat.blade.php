@@ -36,11 +36,35 @@
                 },
                 body: JSON.stringify({question})
             });
-            let data = await res.json();
+            console.log('Request URL:', "{{ route('ai.ask') }}");
+            console.log('Request method: POST');
+            console.log('Request body:', JSON.stringify({question}));
+            console.log('CSRF Token:', "{{ csrf_token() }}");
+            
+            console.log('Response status:', res.status);
+            console.log('Response headers:', res.headers);
+            
+            const responseText = await res.text();
+            console.log('Raw response:', responseText.substring(0, 200));
+            
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (e) {
+                console.error('JSON parse error:', e);
+                console.error('Response was:', responseText.substring(0, 500));
+                answerDiv.innerText = 'Error: Invalid response from server';
+                answerDiv.classList.remove('d-none');
+                answerDiv.classList.add('alert-danger');
+                return;
+            }
+            
+            console.log('Response data:', data);
             answerDiv.innerText = data.answer;
             answerDiv.classList.remove('d-none');
         } catch (err) {
-            answerDiv.innerText = 'حدث خطأ أثناء الاتصال بالذكاء الاصطناعي.';
+            console.error('AI Chat Error:', err);
+            answerDiv.innerText = 'Error: ' + err.message;
             answerDiv.classList.remove('d-none');
             answerDiv.classList.add('alert-danger');
         }

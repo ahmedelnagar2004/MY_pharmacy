@@ -169,6 +169,7 @@ Route::get('/debug/socialite/detailed', function() {
     ]);
 });
 
+// AI Chat Route - Public access
 Route::post('/ask-ai', [AIChatController::class, 'ask'])->name('ai.ask');
 Route::get('/tech', [TechController::class, 'index'])->name('tech.index');
 Route::view('/ai-chat', 'ai-chat')->name('ai.chat');
