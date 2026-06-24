@@ -9,31 +9,56 @@ class AIChatController extends Controller
 {
     public function ask(Request $request)
     {
-    //    dd(env('GEMINI_API_KEY'));
         try {
             $question = $request->input('question');
-            $apiKey = env('GEMINI_API_KEY');
+            $apiKey = env('OPENROUTER_API_KEY');
             if (!$apiKey) {
                 return response()->json(['answer' => 'API KEY IS EMPTY']);
             }
 
-            $client = new \GuzzleHttp\Client();
-            $response = $client->post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent?key=' . $apiKey, [
-                'Content-Type'  => 'application/json',
-                'json' => [
-                    'contents' => [
-                        [
-                            'role' => 'user',
-                            'parts' => [
-                                ['text' => $question]
-                            ]
-                        ]
-                    ]
-                ],
-            ]);
+            $models = [
+                'meta-llama/llama-3.3-70b-instruct:free',
+                'qwen/qwen3-next-80b-a3b-instruct:free',
+                'openai/gpt-oss-120b:free',
+                'openai/gpt-oss-20b:free',
+                'nvidia/nemotron-nano-9b-v2:free',
+            ];
 
-            $data = json_decode($response->getBody(), true);
-            $answer = $data['candidates'][0]['content']['parts'][0]['text'] ?? 'No answer received.';
+            $client = new \GuzzleHttp\Client();
+            $data = null;
+            $lastError = null;
+
+            foreach ($models as $model) {
+                try {
+                    $response = $client->post('https://openrouter.ai/api/v1/chat/completions', [
+                        'headers' => [
+                            'Authorization' => 'Bearer ' . $apiKey,
+                            'Content-Type'  => 'application/json',
+                        ],
+                        'json' => [
+                            'model' => $model,
+                            'messages' => [
+                                [
+                                    'role' => 'user',
+                                    'content' => $question,
+                                ],
+                            ],
+                        ],
+                    ]);
+
+                    $data = json_decode($response->getBody(), true);
+                    break;
+                } catch (\GuzzleHttp\Exception\ClientException $e) {
+                    $lastError = $e;
+                    continue;
+                }
+            }
+
+            if ($data === null) {
+                throw $lastError ?? new \Exception('No free model available right now.');
+            }
+
+            $answer = $data['choices'][0]['message']['content'] ?? 'No answer received.';
             return response()->json([
                 'answer' => $answer
             ]);

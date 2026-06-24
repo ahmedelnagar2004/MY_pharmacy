@@ -68,6 +68,33 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <!--status -->
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="status" class="form-label">الحالة <span class="text-danger">*</span></label>
+                                                <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
+                                                    <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>نشط</option>
+                                                    <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>غير نشط</option>
+                                                </select>
+                                                @error('status')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>  
+                                        <!--subscription -->
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="subscription" class="form-label">الحالة <span class="text-danger">*</span></label>
+                                                <select class="form-select @error('subscription') is-invalid @enderror" id="subscription" name="subscription" required>
+                                                    <option value="subscribed" {{ old('subscription') == 'subscribed' ? 'selected' : '' }}>مشترك</option>
+                                                    <option value="not_subscribed" {{ old('subscription') == 'not_subscribed' ? 'selected' : '' }}>غير مشترك</option>
+                                                </select>
+                                                @error('subscription')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>  
+                                        
                                         <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="number" class="form-label">رقم الهاتف <span class="text-danger">*</span></label>

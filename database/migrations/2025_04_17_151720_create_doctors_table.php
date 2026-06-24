@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('number');
             $table->string('location');
             $table->string('tow_location')->nullable();
+            $table->string('status')->default('active');
+            $table->string('subscription');
             $table->timestamps();
         });
     }

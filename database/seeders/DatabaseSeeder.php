@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Admin;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -18,10 +17,11 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        Admin::create([
+        User::create([
             'name' => 'admin User',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
+            'role' => 'admin',
         ]);
 
     }

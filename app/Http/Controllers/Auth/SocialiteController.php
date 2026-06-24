@@ -24,6 +24,7 @@ class SocialiteController extends Controller
             // تجربة بدون stateless() لمعرفة إذا كانت المشكلة في الجلسة
             if ($provider === 'google') {
                 return Socialite::driver($provider)
+                    ->stateless()
                     ->with(['prompt' => 'select_account'])
                     ->redirect();
             }
@@ -65,9 +66,21 @@ class SocialiteController extends Controller
                 'error_description' => request()->input('error_description')
             ]);
             
-         $socialUser = Socialite::driver($provider)->user();
+         $socialUser = Socialite::driver($provider)->stateless()->user();
             
-         //  dd($socialUser);
+            // Debug: عرض بيانات المستخدم من Google
+            \Log::info('Social user full data', [
+                'provider' => $provider,
+                'id' => $socialUser->getId(),
+                'name' => $socialUser->getName(),
+                'email' => $socialUser->getEmail(),
+                'avatar' => $socialUser->getAvatar(),
+                'token' => $socialUser->token,
+                'refreshToken' => $socialUser->refreshToken,
+                'user_array' => $socialUser->toArray()
+            ]);
+            
+         dd($socialUser);
             // تسجيل بيانات المستخدم من الشبكة الاجتماعية
             \Log::info('Social user data', [
                 'provider' => $provider,

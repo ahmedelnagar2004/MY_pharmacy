@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Http\Requests\StoreUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,6 +12,7 @@ class UserController extends Controller
     $user = User::all();
     return view('client.user', ['users' => $user]);
    }
+  
 
    public function edit($id)
    {
@@ -18,19 +20,10 @@ class UserController extends Controller
        return view('client.edit', ['user' => $user]);
    }
 
-   public function update(Request $request, $id)
+   public function update(StoreUserRequest $request, $id)
    {
        $user = User::findOrFail($id);
-       
-       $request->validate([
-           'name' => 'required|string|max:255',
-           'email' => 'required|email|max:255|unique:users,email,'.$id,
-           'role' => 'required|in:admin,user',
-       ]);
-       
-       $user->name = $request->name;
-       $user->email = $request->email;
-       $user->role = $request->role;
+       $user->update($request->validated());
        
        if($request->filled('password')) {
            $user->password = Hash::make($request->password);

@@ -61,7 +61,7 @@ class WebDoctorController extends BaseController
         // ترتيب النتائج
         $query->orderBy('name', 'asc');
         
-        $doctors = $query->paginate(6);
+        $doctors = $query-> where('status', 'active')->where('subscription', 'subscribed')->paginate(6);
         
         // الحصول على قائمة التخصصات المتاحة
         $specialties = doctor::distinct('specialty')->pluck('specialty')->toArray();
